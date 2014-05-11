@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>2w - 4k 2-way data binding</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,26 +28,24 @@
             <p><strong>2w</strong> gives you a simple, small, library-agnostic 2-way data binding API, inspired in <a href="http://angularjs.org/">angularjs'</a>.</p>
         </section>
         <section id="demo">
-            <h3>Quick demo</h3>
+            <h2>Quick demo</h2>
 <div class="result">
     <div data-controller="quickdemo">
-        <p>{{ greet() }}{{ name }}!</p>
         <input type="text" data-model="name" placeholder="Type your name...">
+        <span>{{ greet() }}{{ name }}!</span>
     </div>
 </div>
-<pre class="html">
-&lt;div data-controller="quickdemo"&gt;
-    &lt;p&gt;{{ greet() }}{{ name }}!&lt;/p&gt;
+<pre><code data-language="html">&lt;div data-controller="quickdemo"&gt;
     &lt;input type="text" data-model="name" placeholder="Type your name..."&gt;
+    &lt;span&gt;{{ greet() }}{{ name }}!&lt;/span&gt;
 &lt;/div&gt;
-</pre>
-<pre class="js">
-$2w.controller('quickdemo', function(scope){
+</code></pre>
+<pre><code data-language="javascript">$2w.controller('quickdemo', function(scope){
     scope.greet = function() {
         return 'Hello' + (scope.name ? ', ' : '');
     }
 });
-</pre>
+</code></pre>
 <script>
     $2w.controller('quickdemo', function(scope){
         scope.greet = function() {
@@ -56,20 +55,18 @@ $2w.controller('quickdemo', function(scope){
 </script>
         </section>
         <section id="documentation">
-            <h3>Quick documentation</h3>
+            <h2>Quick documentation</h2>
             <h4>Install</h4>
             <p>Just add <strong>2w.js</strong> before all other scripts using 2w.</p>
-<pre class="html">
-&lt;script src="/javascripts/2w.js"&gt;&lt;/script&gt;
-</pre>
+<pre><code data-language="html">&lt;script src="/javascripts/2w.js"&gt;&lt;/script&gt;
+</code></pre>
             <p>And you're ready to go.</p>
 
             <h4>Controllers</h4>
             <p>Controllers are callbacks bound to active DOM elements. Any element with a controller attached will listen to data changes and re-render itself whenever a change occurs.</p>
             <p>You create and set a controller using the <strong>data-controller</strong> attribute.</p>
             <p>Once you add some controllers to the html markup, you can initialize some behaviour, using <strong>$2w.controller()</strong>.</p>
-<pre class="html">
-&lt;!doctype html&gt;
+<pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -85,11 +82,10 @@ $2w.controller('quickdemo', function(scope){
     &lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</pre>
+</code></pre>
             <p><strong>$2w.controller()</strong> setter takes two arguments: a controller name, and a behaviour callback. This callback is executed passing the controller scope as argument. Everytime a property of the scope changes, the view is updated automatically.</p>
             <p>If you want to change a scope property from outside the controller callback, you can access it via the <strong>$2w.controller()</strong> getter:</p>
-<pre class="html">
-&lt;!doctype html&gt;
+<pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -110,11 +106,10 @@ $2w.controller('quickdemo', function(scope){
     &lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</pre>
+</code></pre>
             <h4>Template expressions</h4>
             <p>Template expressions are simply good ol' javascript expressions. This means that you can add more than string variables to templates.</p>
-<pre class="html">
-&lt;!doctype html&gt;
+<pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -140,11 +135,10 @@ $2w.controller('quickdemo', function(scope){
     &lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</pre>
+</code></pre>
             <h4>One callback for multiple controllers</h4>
             <p>You can also bootstrap a callback for several controllers. Pass space-separated controller names to <strong>$2w.controller()</strong> and the callback will be invoked with all of them passed as arguments.</p>
-<pre class="html">
-&lt;!doctype html&gt;
+<pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -165,11 +159,10 @@ $2w.controller('quickdemo', function(scope){
     &lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</pre>
+</code></pre>
             <h4>Attaching controllers dynamically</h4>
             <p>You can create a controller dynamically and attach it to any document element using <strong>$2w.attachController()</strong> passing a dom element and a controller name. If the controller doesn't exist, it'll be created on the go.</p>
-<pre class="html">
-&lt;!doctype html&gt;
+<pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -190,9 +183,18 @@ $2w.controller('quickdemo', function(scope){
     &lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</pre>
+</code></pre>
         </section>
     </div>
+    <script src="javascripts/rainbow-custom.min.js"></script>
+    <script>
+        Rainbow.extend([
+            {
+                'name': 'twoway',
+                'pattern': /\$2w/g
+            }
+        ]);
+    </script>
     <footer>
         <div class="wrapper">
             <p>Built by <a href="https://www.nicolasarias.com/">Nicolás Arias</a></p>

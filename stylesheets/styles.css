@@ -34,6 +34,9 @@ h1 small {
 
 h2 {
   color: #393939;
+  border-bottom: 1px solid #ddd;
+  padding: 0 20px 10px;
+  margin: 0 -20px 20px;
 }
 
 h3, h4, h5, h6 {
@@ -78,6 +81,8 @@ pre, .result {
   border-radius: 5px;
   border: 1px solid #e5e5e5;
   overflow-x:  auto;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
 }
 
 table {
