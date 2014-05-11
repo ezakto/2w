@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="handlebars-v1.3.0.js"></script>
+    <script src="lib/2w.js"></script>
+    <script src="2w.handlebars.js"></script>
+  </head>
+  <body>
+    <div id="dynamic">
+        <p>This is a {{static_text}}</p>
+    </div>
+    <a id="link">Attach controller</a>
+    <div data-controller="myCtrl">
+        <p>Foo</p>
+        {{#if show}}<p>bar</p>{{/if}}
+    </div>
+    <script>
+        document.getElementById('link').addEventListener('click', function(){
+            scope = $2w.attachController(document.getElementById('dynamic'), 'myCtrl');
+            scope.static_text = 'dynamic text';
+            scope.show = true;
+        }, false);
+    </script>
+  </body>
+</html>
