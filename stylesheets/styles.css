@@ -48,6 +48,7 @@ a {
   color: #39c;
   font-weight: 400;
   text-decoration: none;
+  cursor: pointer;
 }
 
 a small {
@@ -198,9 +199,40 @@ footer {
   padding: 20px 0;
 }
 
-.demobox {
-  border: 1px solid #e0e0e0;
-  padding: 10px;
+.demobox > div, .demobox > pre, .demobox code {
+  display: none;
+}
+
+.demobox.res + .demobox > div {
+  display: block;
+}
+.demobox.res ul .res { font-weight: bold; }
+
+.demobox.html + .demobox > pre, .demobox.html + .demobox > pre code[data-language="html"] {
+  display: block;
+}
+.demobox.html ul .html { font-weight: bold; }
+
+.demobox.js + .demobox > pre, .demobox.js + .demobox > pre code[data-language="js"] {
+  display: block;
+}
+.demobox.js ul .js { font-weight: bold; }
+
+.demobox > ul {
+  list-style: none;
+  text-align: right;
+  margin: 0;
+  padding: 0;
+}
+
+.demobox > ul li {
+  display: inline-block;
+}
+
+.demobox li a {
+  display: block;
+  padding: 10px 20px;
+  outline: 0;
 }
 
 @media print, screen and (max-width:  960px) {

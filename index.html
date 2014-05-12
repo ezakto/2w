@@ -30,10 +30,17 @@
         <section id="demo">
             <h2>Quick demo</h2>
 <div class="result">
-    <div data-controller="quickdemo">
-        <input type="text" data-model="name" placeholder="Type your name...">
-        <span>{{ greet() }}{{ name }}!</span>
-    </div>
+  <div data-controller="quickdemo">
+      <input type="text" data-model="name" placeholder="Type your name...">
+      <span>{{ greet() }}{{ name }}!</span>
+  </div>
+  <script>
+      $2w.controller('quickdemo', function(scope){
+          scope.greet = function() {
+              return 'Hello' + (scope.name ? ', ' : '');
+          }
+      });
+  </script>
 </div>
 <pre><code data-language="html">&lt;div data-controller="quickdemo"&gt;
     &lt;input type="text" data-model="name" placeholder="Type your name..."&gt;
@@ -44,79 +51,152 @@
     scope.greet = function() {
         return 'Hello' + (scope.name ? ', ' : '');
     }
-});
-</code></pre>
-<script>
-    $2w.controller('quickdemo', function(scope){
-        scope.greet = function() {
-            return 'Hello' + (scope.name ? ', ' : '');
-        }
-    });
-</script>
+});</code></pre>
         </section>
         <section id="documentation">
             <h2>Quick documentation</h2>
             <h4>Install</h4>
             <p>Just add <strong>2w.js</strong> before all other scripts using 2w.</p>
-<pre><code data-language="html">&lt;script src="/javascripts/2w.js"&gt;&lt;/script&gt;
-</code></pre>
+<pre><code data-language="html">&lt;script src="/javascripts/2w.js"&gt;&lt;/script&gt;</code></pre>
             <p>And you're ready to go.</p>
 
             <h4>Controllers</h4>
             <p>Controllers are callbacks bound to active DOM elements. Any element with a controller attached will listen to data changes and re-render itself whenever a change occurs.</p>
             <p>You create and set a controller using the <strong>data-controller</strong> attribute.</p>
             <p>Once you add some controllers to the html markup, you can initialize some behaviour, using <strong>$2w.controller()</strong>.</p>
+<div data-controller="toggler" class="demobox {{paragraph}}">
+  <ul>
+    <li>
+      <a href="#" class="html" onClick="$2w.controller('toggler').paragraph = 'html';return false">HTML</a>
+    </li>
+    <li>
+      <a href="#" class="js" onClick="$2w.controller('toggler').paragraph = 'js';return false">JS</a>
+    </li>
+    <li>
+      <a href="#" class="res" onClick="$2w.controller('toggler').paragraph = 'res';return false">Result</a>
+    </li>
+  </ul>
+</div>
+<div class="demobox">
+<div class="result">
+  <p>This is a simple {{text}}.</p>
+  <p data-controller="paragraph">This is an active {{text}}.</p>
+  <script>
+    $2w.controller('paragraph', function(p){
+      p.text = 'text set dynamically';
+    });
+  </script>
+</div>
 <pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
-    &lt;script src="/javascripts/2w.js"&gt;&lt;/script&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;p&gt;This is a simple {{text}}.&lt;/p&gt;
     &lt;p data-controller="paragraph"&gt;This is an active {{text}}.&lt;/p&gt;
-    &lt;script&gt;
-      $2w.controller('paragraph', function(p){
-        p.text = 'text set dynamically';
-      });
-    &lt;/script&gt;
+
+    &lt;script src="2w.js"&gt;&lt;/script&gt;
+    &lt;script src="demo.js"&gt;&lt;/script&gt;
   &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
+&lt;/html&gt;</code><code data-language="js">$2w.controller('paragraph', function(p){
+  p.text = 'text set dynamically';
+});</code></pre>
+</div>
             <p><strong>$2w.controller()</strong> setter takes two arguments: a controller name, and a behaviour callback. This callback is executed passing the controller scope as argument. Everytime a property of the scope changes, the view is updated automatically.</p>
             <p>If you want to change a scope property from outside the controller callback, you can access it via the <strong>$2w.controller()</strong> getter:</p>
+<div data-controller="toggler" class="demobox {{getter}}">
+  <ul>
+    <li>
+      <a href="#" class="html" onClick="$2w.controller('toggler').getter = 'html';return false">HTML</a>
+    </li>
+    <li>
+      <a href="#" class="js" onClick="$2w.controller('toggler').getter = 'js';return false">JS</a>
+    </li>
+    <li>
+      <a href="#" class="res" onClick="$2w.controller('toggler').getter = 'res';return false">Result</a>
+    </li>
+  </ul>
+</div>
+<div class="demobox">
+<div class="result">
+  <p>This is a simple {{text}}.</p>
+  <p data-controller="paragraph2">This is an active {{text}}.</p>
+  <a id="link">Change paragraph2 text</a>
+  <script>
+  $2w.controller('paragraph2', function(p){
+    p.text = 'text set dynamically';
+  });
+  document.getElementById('link').addEventListener('click', function(){
+    var $p = $2w.controller('paragraph2');
+    $p.text = 'different text';
+  }, false);
+</script>
+</div>
 <pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
-    &lt;script src="/javascripts/2w.js"&gt;&lt;/script&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;p&gt;This is a simple {{text}}.&lt;/p&gt;
-    &lt;p data-controller="paragraph"&gt;This is an active {{text}}.&lt;/p&gt;
-    &lt;a id="link"&gt;Change paragraph text&lt;/a&gt;
-    &lt;script&gt;
-      $2w.controller('paragraph', function(p){
-        p.text = 'text set dynamically';
-      });
-      document.getElementById('link').addEventListener('click', function(){
-        var $p = $2w.controller('paragraph');
-        $p.text = 'different text';
-      }, false);
-    &lt;/script&gt;
+    &lt;p data-controller="paragraph2"&gt;This is an active {{text}}.&lt;/p&gt;
+    &lt;a id="link"&gt;Change paragraph2 text&lt;/a&gt;
+
+    &lt;script src="2w.js"&gt;&lt;/script&gt;
+    &lt;script src="demo.js"&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</code></pre>
+</code><code data-language="js">$2w.controller('paragraph2', function(p){
+  p.text = 'text set dynamically';
+});
+document.getElementById('link').addEventListener('click', function(){
+  var $p = $2w.controller('paragraph2');
+  $p.text = 'different text';
+}, false);</code></pre>
+</div>
             <h4>Template expressions</h4>
             <p>Template expressions are simply good ol' javascript expressions. This means that you can add more than string variables to templates.</p>
+<div data-controller="toggler" class="demobox {{expressions}}">
+  <ul>
+    <li>
+      <a href="#" class="html" onClick="$2w.controller('toggler').expressions = 'html';return false">HTML</a>
+    </li>
+    <li>
+      <a href="#" class="js" onClick="$2w.controller('toggler').expressions = 'js';return false">JS</a>
+    </li>
+    <li>
+      <a href="#" class="res" onClick="$2w.controller('toggler').expressions = 'res';return false">Result</a>
+    </li>
+  </ul>
+</div>
+<div class="demobox">
+  <div class="result" data-controller="expressions">
+    <ul>
+      <li>This is a string: {{string}}</li>
+      <li>This is a math operation: {{2+2}}</li>
+      <li>This is a function call: {{func()}}</li>
+      <li>This is a ternary expression: {{func() ? 'foo' : 'bar'}}</li>
+      <li>This is a assign expression: {{result = 5}}</li>
+      <li>And this is the assignment: {{result}}</li>
+    </ul>
+    <script>
+$2w.controller('expressions', function(ctrl){
+  ctrl.string = 'some text';
+  ctrl.func = function() {
+    return Math.random()*10 < 5;
+  }
+  ctrl.result = 1; // This gets overwritten
+});
+    </script>
+  </div>
 <pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
-    &lt;script src="/javascripts/2w.js"&gt;&lt;/script&gt;
   &lt;/head&gt;
   &lt;body data-controller="expressions"&gt;
-    &lt;ul>
+    &lt;ul&gt;
       &lt;li&gt;This is a string: {{string}}&lt;/li&gt;
       &lt;li&gt;This is a math operation: {{2+2}}&lt;/li&gt;
       &lt;li&gt;This is a function call: {{func()}}&lt;/li&gt;
@@ -124,66 +204,123 @@
       &lt;li&gt;This is a assign expression: {{result = 5}}&lt;/li&gt;
       &lt;li&gt;And this is the assignment: {{result}}&lt;/li&gt;
     &lt;/ul&gt;
-    &lt;script&gt;
-      $2w.controller('expressions', function(ctrl){
-        ctrl.string = 'some text';
-        ctrl.func = function() {
-          return Math.random()*10 &lt; 5;
-        }
-        ctrl.result = 1; // This gets overwritten
-      });
-    &lt;/script&gt;
+
+    &lt;script src="2w.js"&gt;&lt;/script&gt;
+    &lt;script src="demo.js"&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</code></pre>
+</code><code data-language="js">$2w.controller('expressions', function(ctrl){
+  ctrl.string = 'some text';
+  ctrl.func = function() {
+    return Math.random()*10 &lt; 5;
+  }
+  ctrl.result = 1; // This gets overwritten
+});</code></pre>
+</div>
             <h4>One callback for multiple controllers</h4>
             <p>You can also bootstrap a callback for several controllers. Pass space-separated controller names to <strong>$2w.controller()</strong> and the callback will be invoked with all of them passed as arguments.</p>
+<div data-controller="toggler" class="demobox {{multiple}}">
+  <ul>
+    <li>
+      <a href="#" class="html" onClick="$2w.controller('toggler').multiple = 'html';return false">HTML</a>
+    </li>
+    <li>
+      <a href="#" class="js" onClick="$2w.controller('toggler').multiple = 'js';return false">JS</a>
+    </li>
+    <li>
+      <a href="#" class="res" onClick="$2w.controller('toggler').multiple = 'res';return false">Result</a>
+    </li>
+  </ul>
+</div>
+<div class="demobox">
+<div class="result">
+  <div data-controller="ctrlOone">
+      <p>This is {{ctrl}}</p>
+  </div>
+  <div data-controller="ctrlTwo">
+      <p>This is {{ctrl}}</p>
+  </div>
+  <script>
+$2w.controller('ctrlOone ctrlTwo', function(one, two){
+  one.ctrl = 'controller number one';
+  two.ctrl = 'controller number two';
+});
+  </script>
+</div>
 <pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
-    &lt;script src="/javascripts/2w.js"&gt;&lt;/script&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div data-controller="ctrlOone"&gt;
-        &lt;p&gt;This is {{ctrl}};&lt;/p&gt;
+        &lt;p&gt;This is {{ctrl}}&lt;/p&gt;
     &lt;/div&gt;
     &lt;div data-controller="ctrlTwo"&gt;
-        &lt;p&gt;This is {{ctrl}};&lt;/p&gt;
+        &lt;p&gt;This is {{ctrl}}&lt;/p&gt;
     &lt;/div&gt;
-    &lt;script&gt;
-      $2w.controller('ctrlOone ctrlTwo', function(one, two){
-        one.ctrl = 'controller number one';
-        two.ctrl = 'controller number two';
-      });
-    &lt;/script&gt;
+
+    &lt;script src="2w.js"&gt;&lt;/script&gt;
+    &lt;script src="demo.js"&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</code></pre>
+</code><code data-language="js">$2w.controller('ctrlOone ctrlTwo', function(one, two){
+  one.ctrl = 'controller number one';
+  two.ctrl = 'controller number two';
+});</code></pre>
+</div>
             <h4>Attaching controllers dynamically</h4>
             <p>You can create a controller dynamically and attach it to any document element using <strong>$2w.attachController()</strong> passing a dom element and a controller name. If the controller doesn't exist, it'll be created on the go.</p>
+<div data-controller="toggler" class="demobox {{attach}}">
+  <ul>
+    <li>
+      <a href="#" class="html" onClick="$2w.controller('toggler').attach = 'html';return false">HTML</a>
+    </li>
+    <li>
+      <a href="#" class="js" onClick="$2w.controller('toggler').attach = 'js';return false">JS</a>
+    </li>
+    <li>
+      <a href="#" class="res" onClick="$2w.controller('toggler').attach = 'res';return false">Result</a>
+    </li>
+  </ul>
+</div>
+<div class="demobox">
+<div class="result">
+  <div id="dynamic">
+      <p>This is an {{op}}: {{2+2}}</p>
+  </div>
+  <a id="link2">Attach controller</a>
+  <script>
+$2w.controller('myCtrl', function(scope){
+  scope.op = 'expression';
+});
+document.getElementById('link2').addEventListener('click', function(){
+  $2w.attachController(document.getElementById('dynamic'), 'myCtrl');
+}, false);
+  </script>
+</div>
 <pre><code data-language="html">&lt;!doctype html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
-    &lt;script src="/javascripts/2w.js"&gt;&lt;/script&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;div id="dynamic"&gt;
         &lt;p&gt;This is an {{op}}: {{2+2}}&lt;/p&gt;
     &lt;/div&gt;
     &lt;a id="link"&gt;Attach controller&lt;/a&gt;
-    &lt;script&gt;
-      $2w.controller('myCtrl', function(scope){
-        scope.op = 'exprssion';
-      });
-      document.getElementById('link').addEventListener('click', function(){
-        $2w.attachController(document.getElementById('dynamic'), 'myCtrl');
-      }, false);
-    &lt;/script&gt;
+
+    &lt;script src="2w.js"&gt;&lt;/script&gt;
+    &lt;script src="demo.js"&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</code></pre>
+</code><code data-language="js">$2w.controller('myCtrl', function(scope){
+  scope.op = 'exprssion';
+});
+document.getElementById('link').addEventListener('click', function(){
+  $2w.attachController(document.getElementById('dynamic'), 'myCtrl');
+}, false);</code></pre>
+</div>
         </section>
     </div>
     <script src="javascripts/rainbow-custom.min.js"></script>
@@ -194,6 +331,13 @@
                 'pattern': /\$2w/g
             }
         ]);
+        $2w.controller('toggler', function(toggler){
+          toggler.paragraph = 'html';
+          toggler.getter = 'html';
+          toggler.expressions = 'html';
+          toggler.multiple = 'html';
+          toggler.attach = 'html';
+        });
     </script>
     <footer>
         <div class="wrapper">
