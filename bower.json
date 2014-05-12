@@ -1,0 +1,31 @@
+{
+  "name": "2w",
+  "version": "0.1.0",
+  "homepage": "https://github.com/ezakto/2w",
+  "authors": [
+    "Nicolás Arias <nicolas@nicolasarias.com>"
+  ],
+  "description": "4kb 2-way data binding",
+  "main": "lib/2w.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "2",
+    "way",
+    "data",
+    "binding",
+    "library"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "qunit": "~1.14.0"
+  }
+}

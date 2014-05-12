@@ -42,3 +42,13 @@ And that's all. You can now add some controllers:
 # Browser support
 
 Tested with Firefox 18+, Opera 12.16, Chrome, IE8. *Should* work with next versions.
+
+# Testing
+
+Simply install [QUnit](http://qunitjs.com/) with [bower](http://bower.io/):
+
+```bash
+bower install
+```
+
+Then run test/index.html in a local server.

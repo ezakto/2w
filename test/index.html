@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>2w</title>
+    <link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css">
+    <script src="../bower_components/qunit/qunit/qunit.js"></script>
+    <script src="../lib/2w.js"></script>
+    <style>
+        .hide { display: none; }
+    </style>
+</head>
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+        <div data-controller="ctrl">This is {{kind}} text</div>
+        <div data-controller="ctrl1">This is {{kind}} text</div>
+        <div data-controller="ctrl2">This is {{kind}} text</div>
+        <div id="dynamic_attach">This is {{kind}} text 2</div>
+        <div id="dynamic_attach2">This is {{kind}} text 2</div>
+        <div data-controller="expr">
+            <ul>
+                <li>{{2+2}}</li>
+                <li>{{a+1}}</li>
+                <li>{{func()}}</li>
+                <li>{{func() && 'foo'}}</li>
+                <li>{{false ? 'bar' : 'baz'}}</li>
+            </ul>
+        </div>
+        <div class="{{myClass}}" data-attr="{{myClass}}">Dynamic attributes</div>
+    </div>
+    <script>
+        var stage = document.getElementById('qunit-fixture');
+
+        function $(id) {
+            return /^#/.test(id) ? stage.getElementById(id) : stage.getElementsByTagName(id);
+        }
+
+        $2w.config.manual = true;
+        QUnit.testStart(function(){
+            $2w.initialize(); // Re-parse fixture controllers
+        });
+
+        $2w.controller('ctrl', function(ctrl){
+            ctrl.kind = 'some';
+        });
+
+        $2w.controller('ctrl1 ctrl2', function(ctrl1, ctrl2){
+            ctrl1.kind = ctrl2.kind = 'equal';
+        });
+
+        test("Bootstrapped controllers", function() {
+            expect(2);
+
+            equal($('div')[0].innerHTML, 'This is some text', 'parse {{expressions}} with bootstrapped scope');
+            ok(($('div')[1].innerHTML == 'This is equal text') &&
+               ($('div')[2].innerHTML == 'This is equal text'), 'parse {{expressions}} with bootstrapped scopes');
+        });
+
+        test("Dynamically-attached controller", function() {
+            expect(2);
+
+            $2w.attachController($('div')[3], 'ctrl');
+            $2w.attachController($('div')[4], 'some_controller');
+            $2w.controller('some_controller').kind = 'a new';
+            $2w.digest();
+            
+            equal($('div')[3].innerHTML, 'This is some text 2', 'parse {{expressions}} with attached controller scopes');
+            equal($('div')[4].innerHTML, 'This is a new text 2', 'parse {{expressions}} with dynamically created controller scopes');
+        });
+
+        test("Scope change", function() {
+            expect(1);
+
+            $2w.controller('ctrl').kind = 'more';
+            $2w.digest();
+
+            equal($('div')[0].innerHTML, 'This is more text', 'parse {{expressions}} on scope change');
+        });
+
+        test("Expressions", function() {
+            expect(5);
+
+            $2w.controller('expr').a = 9;
+            $2w.controller('expr').func = function(){ return true; };
+            $2w.digest();
+
+            equal($('li')[0].innerHTML, '4', 'math expression');
+            equal($('li')[1].innerHTML, '10', 'math expression with scope variable');
+            equal($('li')[2].innerHTML, 'true', 'function call');
+            equal($('li')[3].innerHTML, 'foo', 'logical condition');
+            equal($('li')[4].innerHTML, 'baz', 'ternary expression');
+        });
+
+        test("Attributes", function() {
+            expect(3);
+
+            $2w.attachController($('div')[6], 'classCtrl');
+            $2w.controller('classCtrl').myClass = 'hide';
+            $2w.digest();
+
+            equal($('div')[6].getAttribute('data-attr'), 'hide', 'parse {{expressions}} on attribute values');
+            equal($('div')[6].className, 'hide', 'parse new attribute values');
+            equal(window.getComputedStyle($('div')[6]).display, 'none', 'redraw element');
+        });
+    </script>
+</body>
+</html>
