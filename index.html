@@ -321,6 +321,52 @@ document.getElementById('link').addEventListener('click', function(){
   $2w.attachController(document.getElementById('dynamic'), 'myCtrl');
 }, false);</code></pre>
 </div>
+            <h4>Events</h4>
+            <p>There are some events tied to certain attributes. For example, you can use data-click to fire an expression:</p>
+<div data-controller="toggler" class="demobox {{click}}">
+  <ul>
+    <li>
+      <a href="#" class="html" data-click="click = 'html'">HTML</a>
+    </li>
+    <li>
+      <a href="#" class="js" data-click="click = 'js'">JS</a>
+    </li>
+    <li>
+      <a href="#" class="res" data-click="click = 'res'">Result</a>
+    </li>
+  </ul>
+</div>
+<div class="demobox">
+<div class="result">
+  <div data-controller="clickCtrl">
+      <p>Some text: {{text}}</p>
+      <a data-click="text = 'bar'">Change text</a>
+  </div>
+  <script>
+$2w.controller('clickCtrl', function(scope){
+  scope.text = 'foo';
+});
+  </script>
+</div>
+<pre><code data-language="html">&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div data-controller="clickCtrl"&gt;
+        &lt;p&gt;Some text: {{text}}&lt;/p&gt;
+        &lt;a data-click="text = 'bar'"&gt;Change text&lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;script src="2w.js"&gt;&lt;/script&gt;
+    &lt;script src="demo.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code><code data-language="js">$2w.controller('clickCtrl', function(scope){
+  scope.text = 'foo';
+});</code></pre>
+</div>
         </section>
     </div>
     <script src="javascripts/rainbow-custom.min.js"></script>
@@ -337,6 +383,7 @@ document.getElementById('link').addEventListener('click', function(){
           toggler.expressions = 'html';
           toggler.multiple = 'html';
           toggler.attach = 'html';
+          toggler.click = 'html';
         });
     </script>
     <footer>
