@@ -25,9 +25,12 @@
                 <li>{{func()}}</li>
                 <li>{{func() && 'foo'}}</li>
                 <li>{{false ? 'bar' : 'baz'}}</li>
+                <li>{{idontexist}}</li>
+                <li>{{}bad-syntax}}</li>
             </ul>
         </div>
         <div class="{{myClass}}" data-attr="{{myClass}}">Dynamic attributes</div>
+        <div data-click="handler()">Click{{ed}}</div>
     </div>
     <script>
         var stage = document.getElementById('qunit-fixture');
@@ -79,7 +82,7 @@
         });
 
         test("Expressions", function() {
-            expect(5);
+            expect(7);
 
             $2w.controller('expr').a = 9;
             $2w.controller('expr').func = function(){ return true; };
@@ -90,6 +93,8 @@
             equal($('li')[2].innerHTML, 'true', 'function call');
             equal($('li')[3].innerHTML, 'foo', 'logical condition');
             equal($('li')[4].innerHTML, 'baz', 'ternary expression');
+            equal($('li')[5].innerHTML, '', 'undefined expression');
+            equal($('li')[6].innerHTML, '', 'bad expression');
         });
 
         test("Attributes", function() {
@@ -102,6 +107,22 @@
             equal($('div')[6].getAttribute('data-attr'), 'hide', 'parse {{expressions}} on attribute values');
             equal($('div')[6].className, 'hide', 'parse new attribute values');
             equal(window.getComputedStyle($('div')[6]).display, 'none', 'redraw element');
+        });
+
+        test("Click", function() {
+            expect(1);
+
+            $2w.attachController($('div')[7], 'clickCtrl');
+            $2w.controller('clickCtrl').handler = function() {
+                $2w.controller('clickCtrl').ed = 'ed';
+                $2w.digest();
+            };
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, true);
+            evt.eventName = "click";
+
+            $('div')[7].dispatchEvent(evt);
+            equal($('div')[7].innerHTML, 'Clicked', 'parse data-click expressions on click');
         });
     </script>
 </body>
